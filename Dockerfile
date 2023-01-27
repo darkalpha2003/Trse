@@ -1,17 +1,17 @@
 FROM node:lts-buster
 
-RUN apt update -y
-RUN apt upgrade -y
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+  apt-get install -y \
   ffmpeg \
-  sudo \
-  imagemagick
-RUN pip install pillow
-RUN npm install -g npm@latest
-RUN npm install -g forever@latest
+  imagemagick \
+  webp && \
+  apt-get upgrade -y && \
+  rm -rf /var/lib/apt/lists/*
 
-WORKDIR /home/frmdev/frmdev
 COPY package.json .
+
 RUN npm install
+
 COPY . .
-CMD ["forever", "server.js"]
+
+CMD ["node", "server.js"]
