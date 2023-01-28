@@ -1,7 +1,6 @@
+__path = process.cwd()
 const express = require('express');
 const Spotify = require('spotifydl-core').default
-const bodyParser = require('body-parser');
-let app = express();
 
 const credentials = {
     clientId: 'd37a3ad1c3b9475a85cd42d836441953',
@@ -10,28 +9,27 @@ const credentials = {
 
 const spotify = new Spotify(credentials);
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
-app.listen(3000, () => {
-    console.log('Abdl is up.')
-})
 
-app.post('/api/download', async (req, res) => {
-    try {
-        if (req.body.url.startsWith('https://open.spotify.com/') || req.body.url.startsWith('http://open.spotify.com/')) {
-            res.header('Content-Disposition', 'attachment; filename="' + new Date() + '| Spotify - Fizzy.mp3"');
-            let song = await spotify.downloadTrack(req.body.url);
-            res.write(song, 'binary');
-            res.end();
-        } else {
-            res.json({ error: 'Not found', status: 404 })
-        }
-    } catch (err) {
-        res.json({ error: err, status: 500 })
-    }
-})
+let express = require('express');
+let router = express.Router();	   
+router.get('/', (req, res) => {
+const url = req.query.url   
+let song = await spotify.downloadTrack(url ,'spo.mp3');
+const jsond = { "status" : "ok"}	     
+res.sendfile(__path + '/spo.mp3') })
 
-app.get('*', (req, res) => {
-    res.json({ error: 'Not found', status: 404 })
+let cors = require('cors')
+let secure = require('ssl-express-www')
+let PORT = process.env.PORT || 8080 || 5000 || 3000
+let app = express()
+app.enable('trust proxy');
+app.set("json spaces",2)
+app.use(cors())
+app.use(secure)
+app.use(express.static("assets"))
+
+app.use('/',  router)
+app.listen(PORT, () => {
+    console.log("Server running on port " + PORT) 
 })
