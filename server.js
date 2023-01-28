@@ -13,7 +13,7 @@ const spotify = new Spotify(credentials);
 
 let express = require('express');
 let router = express.Router();	   
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
 const url = req.query.url   
 let song = await spotify.downloadTrack(url ,'spo.mp3');
 const jsond = { "status" : "ok"}	     
