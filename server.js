@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 const url = req.query.url   
 let song = await spotify.downloadTrack(url ,'spo.mp3');
 const jsond = { "status" : "ok"}	     
-res.sendfile(__path + '/spo.mp3') })
+res.sendFile(__path + '/spo.mp3') })
 
 let cors = require('cors')
 let secure = require('ssl-express-www')
