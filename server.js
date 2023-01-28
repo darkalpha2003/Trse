@@ -1,5 +1,5 @@
 __path = process.cwd()
-const express = require('express');
+
 const Spotify = require('spotifydl-core').default
 
 const credentials = {
